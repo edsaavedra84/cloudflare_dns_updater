@@ -61,7 +61,7 @@ def load_config(config_path="config/config.json"):
             config = json.load(f)
 
         # Validate required fields
-        required_fields = ['zone', 'dnsrecord', 'cloudflare_auth_email', 'cloudflare_auth_key']
+        required_fields = ['zone', 'dnsrecords', 'cloudflare_auth_email', 'cloudflare_auth_key']
         missing_fields = [field for field in required_fields if field not in config]
 
         if missing_fields:
@@ -217,43 +217,47 @@ def check_and_update_dns():
     _config = load_config()
 
     zone = _config['zone']
-    dnsrecord = _config['dnsrecord']
+    dnsrecords = _config['dnsrecords']
     auth_email = _config['cloudflare_auth_email']
     auth_key = _config['cloudflare_auth_key']
 
-    logger.info(f"Starting DNS update check for {dnsrecord}")
+    logger.info(f"Number of DNS records to be updated: {len(dnsrecords)}")
 
-    try:
-        # Get current external IP
-        current_ip = get_external_ip()
-        logger.info(f"Current IP is {current_ip}")
+    for dnsrecord in dnsrecords:
+        logger.info(f"\t{'-' * 20}")
+        logger.info(f"\tStarting DNS update check for {dnsrecord}")
 
-        # Get current Cloudflare DNS IP
-        cf_ip = get_cloudflare_dns_ip(dnsrecord)
-        logger.info(f"Cloudflare IP is {cf_ip}")
+        try:
+            # Get current external IP
+            current_ip = get_external_ip()
+            logger.info(f"\tCurrent IP is {current_ip}")
 
-        # Check if update is needed
-        if cf_ip and cf_ip == current_ip:
-            logger.info(f"{dnsrecord} is currently set to {current_ip}; no changes needed")
-            return
+            # Get current Cloudflare DNS IP
+            cf_ip = get_cloudflare_dns_ip(dnsrecord)
+            logger.info(f"\tCloudflare IP is {cf_ip}")
 
-        # Update is needed
-        logger.warning(f"DNS record needs updating from {cf_ip} to {current_ip}")
+            # Check if update is needed
+            if cf_ip and cf_ip == current_ip:
+                logger.info(f"\t{dnsrecord} is currently set to {current_ip}; no changes needed")
+                return
 
-        # Get zone ID
-        zone_id = get_zone_id(zone, auth_email, auth_key)
-        logger.info(f"Zone ID for {zone} is {zone_id}")
+            # Update is needed
+            logger.warning(f"\tDNS record needs updating from {cf_ip} to {current_ip}")
 
-        # Get DNS record ID
-        record_id = get_dns_record_id(zone_id, dnsrecord, auth_email, auth_key)
-        logger.info(f"DNS record ID for {dnsrecord} is {record_id}")
+            # Get zone ID
+            zone_id = get_zone_id(zone, auth_email, auth_key)
+            logger.info(f"\tZone ID for {zone} is {zone_id}")
 
-        # Update the record
-        result = update_dns_record(zone_id, record_id, dnsrecord, current_ip, auth_email, auth_key)
-        logger.success(f"Successfully updated {dnsrecord} to {current_ip}")
-        logger.debug(f"Response: {json.dumps(result, indent=2)}")
-    except Exception as e:
-        logger.error(f"Unexpected error during DNS update: {e}")
+            # Get DNS record ID
+            record_id = get_dns_record_id(zone_id, dnsrecord, auth_email, auth_key)
+            logger.info(f"\tDNS record ID for {dnsrecord} is {record_id}")
+
+            # Update the record
+            result = update_dns_record(zone_id, record_id, dnsrecord, current_ip, auth_email, auth_key)
+            logger.success(f"\tSuccessfully updated {dnsrecord} to {current_ip}")
+            logger.debug(f"\tResponse: {json.dumps(result, indent=2)}")
+        except Exception as e:
+            logger.error(f"\tUnexpected error during DNS update: {e}")
 
 
 def signal_handler(signum, frame):
@@ -276,7 +280,7 @@ def main():
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
-    logger.info(f"DNS Update Scheduler started for {_config['dnsrecord']}")
+    logger.info(f"DNS Update Scheduler started for {_config['dnsrecords']}")
     logger.info("Running checks every 1 minute. Press Ctrl+C to stop.")
 
     # Schedule the job to run every 1 minute
