@@ -38,22 +38,6 @@ The code is straightforward and documented - hack away!
 
 ## Features
 
-### Two Implementations
-
-1. **Bash Script** (`dns_update.sh`):
-   - Simple, single-file solution
-   - Good for cron jobs or one-off updates
-   - Minimal dependencies
-
-2. **Python Script** (`dns_update.py`):
-   - Feature-rich with built-in scheduler
-   - Colorized logging to console and file
-   - Robust error handling
-   - Docker support
-   - **Recommended for continuous operation**
-
-### Python Script Features
-
 - 🔄 **Built-in Scheduler**: Automatically checks every 1 minute (no cron needed)
 - 📊 **Advanced Logging**: Color-coded console output with file logging
 - 🔒 **Secure**: Credentials stored in external JSON config (not in code)
@@ -88,7 +72,7 @@ The code is straightforward and documented - hack away!
 
 That's it! The container will now check your DNS every minute and update when needed.
 
-### Option 2: Run with Python
+### Option 2: Run with Python Directly
 
 1. **Install dependencies**:
    ```bash
@@ -105,26 +89,6 @@ That's it! The container will now check your DNS every minute and update when ne
 3. **Run**:
    ```bash
    python dns_update.py
-   ```
-
-### Option 3: Run Bash Script (One-time or with cron)
-
-1. **Edit the script** with your credentials:
-   ```bash
-   nano dns_update.sh
-   # Update zone, dnsrecord, email, and API key
-   ```
-
-2. **Run manually**:
-   ```bash
-   bash dns_update.sh
-   ```
-
-3. **Or set up a cron job** (runs every 5 minutes):
-   ```bash
-   crontab -e
-   # Add this line:
-   */5 * * * * /path/to/dns_update.sh
    ```
 
 ## Configuration
@@ -274,13 +238,7 @@ notify_discord(f"🔄 DNS updated: {dnsrecord} → {current_ip}")
 
 ## Requirements
 
-### Bash Script
-- bash
-- curl
-- jq
-- nslookup
-
-### Python Script
+### Python
 - Python 3.6+
 - requests
 - loguru
@@ -299,8 +257,7 @@ pip install -r requirements.txt
 
 ```
 dns_update/
-├── dns_update.sh           # Bash implementation
-├── dns_update.py           # Python implementation (recommended)
+├── dns_update.py           # Main Python application
 ├── config.sample.json      # Sample configuration file
 ├── requirements.txt        # Python dependencies
 ├── config/                 # Your config files (git-ignored)
@@ -355,9 +312,9 @@ This project is provided as-is for personal and home lab use. Modify and use as 
 
 ## Acknowledgments
 
-- Original bash script concept inspired by common DDNS solutions
 - Built for home lab enthusiasts and self-hosters
 - Designed to be simple, reliable, and hackable
+- Inspired by the need for reliable DDNS solutions for home infrastructure
 
 ## Support
 

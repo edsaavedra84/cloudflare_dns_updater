@@ -215,6 +215,7 @@ _config = None
 def check_and_update_dns():
     """Check and update DNS record if needed"""
     global _config
+    _config = load_config()
 
     zone = _config['zone']
     dnsrecord = _config['dnsrecord']
