@@ -1,0 +1,50 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info
+.eggs
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.nox
+
+# Virtual environments
+venv
+env
+ENV
+.venv
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Project-specific
+config/
+config.json
+logs/
+*.log
+
+# Documentation
+*.md
+!README.md
+
+# Docker
+docker/
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Bash script (not needed in container)
+dns_update.sh

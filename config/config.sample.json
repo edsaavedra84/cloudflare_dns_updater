@@ -1,0 +1,6 @@
+{
+  "zone": "example.com",
+  "dnsrecord": "home.example.com",
+  "cloudflare_auth_email": "your-email@example.com",
+  "cloudflare_auth_key": "your-cloudflare-api-key-here"
+}
