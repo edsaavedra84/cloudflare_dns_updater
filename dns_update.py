@@ -27,11 +27,10 @@ def setup_logging():
 
     # Add colorized console handler
     logger.add(
-        sys.stdout,
-        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>",
+        sys.stdout, 
         level="INFO",
-        colorize=True
-    )
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"
+    )    
 
     # Add file handler with rotation
     log_file = logs_dir / "dns_update_{time:YYYY-MM-DD}.log"
@@ -235,7 +234,7 @@ def check_and_update_dns():
 
         # Check if update is needed
         if cf_ip and cf_ip == current_ip:
-            logger.success(f"{dnsrecord} is currently set to {current_ip}; no changes needed")
+            logger.info(f"{dnsrecord} is currently set to {current_ip}; no changes needed")
             return
 
         # Update is needed
