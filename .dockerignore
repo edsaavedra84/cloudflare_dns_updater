@@ -45,6 +45,3 @@ docker/
 Dockerfile
 docker-compose.yml
 .dockerignore
-
-# Bash script (not needed in container)
-dns_update.sh

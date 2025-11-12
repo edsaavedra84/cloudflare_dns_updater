@@ -13,7 +13,7 @@ services:
       # Mount logs directory for persistence
       - ../logs:/app/logs
     environment:
-      - TZ=UTC
+      - TZ=America/New_York  # Set timezone (adjust as needed)
     # Resource limits (optional, adjust as needed)
     deploy:
       resources:
