@@ -239,7 +239,7 @@ def check_and_update_dns():
             # Check if update is needed
             if cf_ip and cf_ip == current_ip:
                 logger.info(f"\t{dnsrecord} is currently set to {current_ip}; no changes needed")
-                break
+                continue
 
             # Update is needed
             logger.warning(f"\tDNS record needs updating from {cf_ip} to {current_ip}")
